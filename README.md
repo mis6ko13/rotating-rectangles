@@ -1,6 +1,6 @@
 # RotatingRectangelProblem
 
-## Demo: `http://mysterious-trail.surge.sh/`
+## Demo ==> [follow here](http://mysterious-trail.surge.sh/)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
 
