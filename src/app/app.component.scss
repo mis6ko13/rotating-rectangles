@@ -1,0 +1,35 @@
+:host ::ng-deep {
+  .rectangle {
+    display: inline-block;
+    border: 1px solid black;
+  }
+}
+
+.rectangle-field {
+  display: flex;
+  align-items: flex-end;
+  &, &_vertical {
+    width: 100%;
+    min-height: 40vh;
+    margin: 5px 0;
+    background: rgba(0,0,0,.05);
+    position: relative;
+  }
+}
+
+.divider {
+  height: 0;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid black;
+}
+
+.quantity-preview {
+  width: 35px;
+  margin-left: 1em;
+  padding-left: 5px;
+}
+#range-selection {
+  width: 250px;
+  max-width: 60%;
+}
