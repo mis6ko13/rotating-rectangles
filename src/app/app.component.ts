@@ -82,7 +82,7 @@ export class AppComponent {
     const coordsCopy = [...coords];
     coordsCopy.sort((a, b) => a.topLeft.y - b.topLeft.y);
     coordsCopy.forEach((elFromSorted, i) => {
-      const prevProcessedRectangle = coordsCopy[i - 1];
+      let prevProcessedRectangle;
       const index = coords.findIndex(el => el.index === elFromSorted.index);
       const verticalRect: any = {
         index: `rectangleShape-${arr.length}`,
@@ -99,15 +99,23 @@ export class AppComponent {
         if (coords[i - 1].processed) {
           verticalRect.topLeft.x = verticalRect.bottomLeft.x = coords[i].bottomLeft.x;
           verticalRect.bottomLeft.y = verticalRect.bottomRight.y = coords[i - 1].topLeft.y;
+          prevProcessedRectangle = coords[i - 1];
           break;
         }
       }
       for (let i = index; i < coords.length - 1; i++) {
         if (coords[i + 1].processed) {
           verticalRect.topRight.x = verticalRect.bottomRight.x = coords[i].bottomRight.x;
-          if (prevProcessedRectangle && prevProcessedRectangle.topLeft.y < coords[i + 1].topLeft.y) {
+          if (prevProcessedRectangle) {
+            if (prevProcessedRectangle.topLeft.y < coords[i + 1].topLeft.y) {
+              verticalRect.bottomLeft.y = verticalRect.bottomRight.y = coords[i + 1].topLeft.y;
+            } else {
+              verticalRect.bottomLeft.y = verticalRect.bottomRight.y = prevProcessedRectangle.topLeft.y;
+            }
+          } else {
             verticalRect.bottomLeft.y = verticalRect.bottomRight.y = coords[i + 1].topLeft.y;
           }
+          prevProcessedRectangle = coords[i + 1];
           break;
         }
       }
