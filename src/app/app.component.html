@@ -9,7 +9,7 @@
     <input id="range-selection" list="tick-marks"
            type="range" title="Select rectangles quantity"
            [(ngModel)]="rangeVal" [min]="minRangeVal" [max]="maxRangeVal" step="1">
-    <input type="text" title="Quantity (this input-filed is readonly)"
+    <input type="text" title="Quantity (this field is readonly)"
            class="quantity-preview"
            [(ngModel)]="rangeVal" readonly>
     <button #goBtn class="btn btn-success ml-2"

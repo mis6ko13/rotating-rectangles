@@ -80,10 +80,9 @@ export class AppComponent {
   generateVerticalRects(coords) {
     const arr = [];
     const coordsCopy = [...coords];
-    let leftSearchProcessed = false;
-    let maxY = 0;
     coordsCopy.sort((a, b) => a.topLeft.y - b.topLeft.y);
     coordsCopy.forEach((elFromSorted, i) => {
+      const prevProcessedRectangle = coordsCopy[i - 1];
       const index = coords.findIndex(el => el.index === elFromSorted.index);
       const verticalRect: any = {
         index: `rectangleShape-${arr.length}`,
@@ -99,33 +98,36 @@ export class AppComponent {
       for (let i = index; i > 0; i--) {
         if (coords[i - 1].processed) {
           verticalRect.topLeft.x = verticalRect.bottomLeft.x = coords[i].bottomLeft.x;
-          verticalRect.bottomLeft.y = verticalRect.bottomRight.y = maxY = coords[i - 1].topLeft.y;
+          verticalRect.bottomLeft.y = verticalRect.bottomRight.y = coords[i - 1].topLeft.y;
           break;
         }
       }
       for (let i = index; i < coords.length - 1; i++) {
         if (coords[i + 1].processed) {
           verticalRect.topRight.x = verticalRect.bottomRight.x = coords[i].bottomRight.x;
-          verticalRect.bottomLeft.y = verticalRect.bottomRight.y = coords[i + 1].topLeft.y;
+          if (prevProcessedRectangle && prevProcessedRectangle.topLeft.y < coords[i + 1].topLeft.y) {
+            verticalRect.bottomLeft.y = verticalRect.bottomRight.y = coords[i + 1].topLeft.y;
+          }
           break;
         }
       }
       coords[index].processed = true;
-      leftSearchProcessed = false;
       arr.push(verticalRect);
     });
     return arr;
   }
 
   displayVerticalRects(coords) {
+    const fieldWidth = this.verticalField.nativeElement.offsetWidth;
+    const fieldHeight = this.verticalField.nativeElement.offsetHeight;
     coords.forEach(el => {
       const rect = document.createElement('div');
       rect.classList.add('rectangle');
       rect.style.position = 'absolute';
-      rect.style.left = `${el.bottomLeft.x}px`;
-      rect.style.bottom = `${el.bottomLeft.y}px`;
-      rect.style.width = `${el.bottomRight.x - el.bottomLeft.x}px`;
-      rect.style.height = `${el.topLeft.y - el.bottomLeft.y}px`;
+      rect.style.left = `${(el.bottomLeft.x / fieldWidth) * 100}%`;
+      rect.style.bottom = `${(el.bottomLeft.y / fieldHeight) * 100}%`;
+      rect.style.width = `${((el.bottomRight.x - el.bottomLeft.x) / fieldWidth) * 100}%`;
+      rect.style.height = `${((el.topLeft.y - el.bottomLeft.y) / fieldHeight) * 100}%`;
       this.verticalField.nativeElement.appendChild(rect);
     });
   }
